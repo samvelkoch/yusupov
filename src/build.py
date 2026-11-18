@@ -70,5 +70,7 @@ def md(f):
 fr=json.load(open(W/'data/front.json'))
 for k,v in fr.items(): D['front'][k]={'title':v['title'],'by':v['by'],'p':md(v['file'])}
 D['rod']=json.load(open(W/'data/rod.json'))
+D['ivan']=json.load(open(W/'data/ivan.json'))
+D['maps']=json.load(open(W/'data/maps.json'))
 OUT.write_text(json.dumps(D,ensure_ascii=False,separators=(',',':')),encoding='utf8')
 print('chapters',len(D['chapters']),'quotes',len(D['quotes']),'tl',len(D['timeline']),'world',sum(len(s['items']) for s in D['world']),'profiles',len(D['profiles']),'size',OUT.stat().st_size//1024,'KB')

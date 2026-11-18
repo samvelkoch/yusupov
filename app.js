@@ -93,6 +93,68 @@ function start(D){
       var hd=el('p','jgroup',g[0]); hd.id='jg-'+i; jl.appendChild(hd); es.forEach(function(e,k){ jl.appendChild(jEntry(e,i===0&&k===0)); }); });
   })();
 
+  // МИР ИВАНА: вкладки внутри «Бранчей»
+  var IV=D.ivan||{};
+  function bLink(n){ var a=el('a','chl blink','бранч '+n); a.href='#b-'+n; return a; }
+  (function(){ var tabs=document.getElementById('b-tabs'); if(!tabs) return;
+    var defs=[['diary','Дневник',JE.length],['mornings','Утро за утром',(IV.mornings||[]).length],['echo','Переклички',(IV.echo||[]).length],['enc','Энциклопедия',(IV.enc||[]).length],['shelf','Полка',(IV.shelf||[]).length],['notes','Что заметил Иван',(IV.notes||[]).length],['map','Карта',D.maps&&D.maps.ivan?D.maps.ivan.points.length:0]];
+    var built={};
+    function bshow(id,save){ defs.forEach(function(d){ var on=d[0]===id; document.getElementById('bp-'+d[0]).hidden=!on; var b=document.getElementById('bt-'+d[0]); if(b) b.setAttribute('aria-pressed',on?'true':'false'); });
+      if(!built[id]&&BUILD[id]){ built[id]=1; BUILD[id](document.getElementById('bp-'+id)); }
+      if(save){ try{ localStorage.setItem('yus-btab',id); }catch(e){} } }
+    defs.forEach(function(d){ if(!d[2]) return; var b=el('button','chip',d[1]); b.type='button'; b.id='bt-'+d[0]; b.appendChild(el('span','n',String(d[2]))); b.addEventListener('click',function(){ bshow(d[0],true); }); tabs.appendChild(b); });
+    var MV=(IV.mornings||[]).filter(function(m){ return JE.some(function(e){ return e.n===m.b; }); });
+    var BUILD={
+      mornings:function(p){ p.appendChild(el('p','lead bp-lead','28 утр по порядку: где Иван читал, какая была погода, что творилось вокруг стола. Полоса — сколько страниц из 428 уже позади.'));
+        var ol=el('ol','mlist'); MV.forEach(function(m){ var li=el('li','card mcard2'); var top=el('div','mtop'); top.appendChild(bLink(m.b)); var e=JE.filter(function(x){ return x.n===m.b; })[0]; if(e&&e.ch) top.appendChild(el('span','chl',rangeLab(e.ch)));
+          li.appendChild(top); var bar=el('div','mbar'); var tr=el('span','mtrack'), i=el('i'); i.style.width=Math.round(100*m.pages/428)+'%'; tr.appendChild(i); bar.appendChild(tr); bar.appendChild(el('span',null,m.pages+' стр.')); li.appendChild(bar);
+          function row(k,v){ if(!v||v==='—') return; var r=el('p','mrow'); r.appendChild(el('b',null,k+' ')); r.appendChild(document.createTextNode(v)); li.appendChild(r); }
+          row('Где.',m.where); row('Погода.',m.sky); row('Вокруг.',m.scene); row('Настроение.',m.mood); ol.appendChild(li); }); p.appendChild(ol); },
+      echo:function(p){ p.appendChild(el('p','lead bp-lead','Где утро Ивана перекликается с главой Феликса. Слева Иван, справа Феликс, внизу — что их связывает (наша трактовка).'));
+        (IV.echo||[]).filter(function(x){ return x.ch<=R; }).forEach(function(x){ var c=el('article','card echo'); var g=el('div','echo-g');
+          var a=el('div','echo-i'); var ah=el('div','mtop'); ah.appendChild(el('span','rl','Иван')); ah.appendChild(bLink(x.b)); a.appendChild(ah); a.appendChild(el('blockquote',null,'«'+x.ivan+'»')); g.appendChild(a);
+          var b=el('div','echo-f'); var bh=el('div','mtop'); bh.appendChild(el('span','rl','Феликс')); bh.appendChild(chLink(x.ch)); b.appendChild(bh); b.appendChild(el('p',null,x.felix)); g.appendChild(b); c.appendChild(g);
+          var br=el('p','echo-b'); br.appendChild(el('span','kind reading','Трактовка')); br.appendChild(document.createTextNode(' '+x.bridge)); c.appendChild(br); p.appendChild(c); }); },
+      enc:function(p){ p.appendChild(el('p','lead bp-lead','Что Иван подсвечивает сам: его «матчасть», места, люди и книги из его мира, параллели с сегодняшним днём и то, что стояло на столе. Сначала его слова, ниже, отдельно, — наша справка.'));
+        var cats=IV.cats||{}; Object.keys(cats).forEach(function(k){ var its=(IV.enc||[]).filter(function(x){ return x.cat===k; }); if(!its.length) return;
+          p.appendChild(el('p','jgroup',cats[k])); var w=el('div','enc');
+          its.forEach(function(x){ var c=el('article','card enc-c'); var t=el('div','mtop'); t.appendChild(el('h3',null,x.title)); t.appendChild(bLink(x.b)); c.appendChild(t);
+            c.appendChild(el('blockquote',null,'«'+x.ivan+'»')); if(x.note){ var n=el('p','enc-n'); n.appendChild(el('span','kind fact','Справка')); n.appendChild(document.createTextNode(' '+x.note)); c.appendChild(n); } w.appendChild(c); }); p.appendChild(w); }); },
+      shelf:function(p){ p.appendChild(el('p','lead bp-lead','Список литературы Ивана из постскриптума: книги, которые всплывали в разговорах с князем. Под каждой — почему она связана с мемуарами.'));
+        var w=el('div','shelf'); (IV.shelf||[]).forEach(function(x){ var c=el('article','card book'); c.appendChild(el('b','bk-t',x.t)); c.appendChild(el('span','bk-a',x.a)); c.appendChild(el('p',null,x.why)); var m=el('div','mtop'); m.appendChild(bLink(x.b)); if(x.ch&&x.ch<=R) m.appendChild(chLink(x.ch)); c.appendChild(m); w.appendChild(c); }); p.appendChild(w); },
+      notes:function(p){ p.appendChild(el('p','lead bp-lead','Сквозные темы, к которым Иван возвращается в разных бранчах.'));
+        (IV.notes||[]).forEach(function(x){ var c=el('article','card note'); c.appendChild(el('h3',null,x.title)); c.appendChild(el('blockquote',null,'«'+x.ivan+'»')); var m=el('div','mtop'); x.b.forEach(function(n){ m.appendChild(bLink(n)); }); c.appendChild(m); p.appendChild(c); }); },
+      map:function(p){ p.appendChild(mapBlock('ivan',D.maps.ivan,function(pt){ return [bLink(pt.b)]; })); }
+    };
+    window.__bshow=bshow;
+    var sv=null; try{ sv=localStorage.getItem('yus-btab'); }catch(e){} bshow(sv&&document.getElementById('bt-'+sv)?sv:'diary');
+  })();
+
+  // КАРТЫ: Leaflet подгружается по требованию, подложка CARTO (светлая/тёмная по теме)
+  var LL=null;
+  function loadLeaflet(){ if(LL) return LL; LL=new Promise(function(ok,no){ var c=document.createElement('link'); c.rel='stylesheet'; c.href='vendor/leaflet/leaflet.css'; document.head.appendChild(c);
+    var s=document.createElement('script'); s.src='vendor/leaflet/leaflet.js'; s.onload=function(){ ok(window.L); }; s.onerror=no; document.head.appendChild(s); }); return LL; }
+  function isDark(){ var t=document.documentElement.getAttribute('data-theme'); return t==='dark'||t==='night'||(!t&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches); }
+  function mapBlock(id,M,links){
+    var blk=el('div','block map-block'); blk.id='map-'+id; var hd=el('header'); hd.appendChild(el('h3',null,M.title)); if(M.lead) hd.appendChild(el('p','lead',M.lead)); blk.appendChild(hd);
+    var wrap=el('div','map-wrap'), box=el('div','lmap'); wrap.appendChild(box); var ol=el('ol','map-legend'); wrap.appendChild(ol); blk.appendChild(wrap);
+    var pts=M.points.filter(function(p){ return !p.ch||p.ch<=R; }).sort(function(a,b){ return (a.ch||a.b||0)-(b.ch||b.b||0); }), marks=[];
+    pts.forEach(function(p,i){ var li=el('li'); li.dataset.n=i+1; li.tabIndex=0; li.appendChild(el('span','pin',String(i+1))); var t=el('div'); t.appendChild(el('b',null,p.name)); t.appendChild(document.createTextNode(' '+p.text)); var w=el('span','chs'); (p.ch?[chLink(p.ch)]:links(p)).forEach(function(a){ w.appendChild(a); }); t.appendChild(w); li.appendChild(t); ol.appendChild(li); });
+    loadLeaflet().then(function(L){
+      var map=L.map(box,{scrollWheelZoom:false,attributionControl:true}); var dark=isDark();
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/'+(dark?'dark_all':'light_all')+'/{z}/{x}/{y}{r}.png',{attribution:'© OpenStreetMap, © CARTO',subdomains:'abcd',maxZoom:18}).addTo(map);
+      var line=[]; pts.forEach(function(p,i){ var m=L.marker(p.ll,{icon:L.divIcon({className:'lpin',html:'<span>'+(i+1)+'</span>',iconSize:[24,24],iconAnchor:[12,12]})}).addTo(map); m.on('click',function(){ hl(i+1,false); }); marks.push(m); line.push(p.ll); });
+      if(id==='felix') L.polyline(line,{color:dark?'#bbb':'#555',weight:1,opacity:.6,dashArray:'3 5'}).addTo(map);
+      map.fitBounds(L.latLngBounds(line).pad(.1)); blk.__map=map;
+      function hl(n,fly){ Array.prototype.forEach.call(ol.children,function(li){ li.classList.toggle('on',li.dataset.n===String(n)); }); marks.forEach(function(m,i){ var e=m.getElement(); if(e) e.classList.toggle('on',i+1===n); });
+        if(fly) map.flyTo(pts[n-1].ll,Math.max(map.getZoom(),6),{duration:.6}); else { var li=ol.querySelector('li[data-n="'+n+'"]'); if(li) li.scrollIntoView({block:'nearest',behavior:'smooth'}); } }
+      ol.addEventListener('click',function(e){ var li=e.target.closest('li'); if(li&&!e.target.closest('a')) hl(+li.dataset.n,true); });
+      ol.addEventListener('keydown',function(e){ var li=e.target.closest('li'); if(li&&(e.key==='Enter'||e.key===' ')){ e.preventDefault(); hl(+li.dataset.n,true); } });
+      setTimeout(function(){ map.invalidateSize(); map.fitBounds(L.latLngBounds(line).pad(.1)); },60);
+    }).catch(function(){ box.textContent='Карта не загрузилась.'; });
+    return blk;
+  }
+
   // ГЛАВА
   var chState=1, cpGrid=document.getElementById('cp-grid'), cpOpen=document.getElementById('cp-open');
   PARTS.forEach(function(P){ var h=el('div','cp-part'); h.appendChild(el('b',null,P.name)); h.appendChild(el('span',null,P.years)); cpGrid.appendChild(h);
@@ -132,6 +194,8 @@ function start(D){
     var js=JE.filter(function(e){ return nums(e.ch).indexOf(n)>-1; }), jl=document.getElementById('ch-journal'); jl.textContent='';
     document.getElementById('ch-j-block').hidden=!js.length;
     js.forEach(function(e){ jl.appendChild(jEntry(e,true,function(s){ return !s.ch||nums(s.ch).indexOf(n)>-1; })); });
+    (IV.echo||[]).filter(function(x){ return x.ch===n; }).forEach(function(x){ var c=el('article','card echo'); var t=el('div','mtop'); t.appendChild(el('span','rl','Перекличка')); t.appendChild(bLink(x.b)); c.appendChild(t);
+      c.appendChild(el('blockquote',null,'«'+x.ivan+'»')); var br=el('p','echo-b'); br.appendChild(el('span','kind reading','Трактовка')); br.appendChild(document.createTextNode(' '+x.bridge)); c.appendChild(br); jl.appendChild(c); document.getElementById('ch-j-block').hidden=false; });
     var pb=document.getElementById('ch-people'); pb.textContent=''; var ps=PROF.filter(function(p){ return p.ev.some(function(e){ return e.ch===n; }); });
     document.getElementById('ch-p-block').hidden=!ps.length; ps.forEach(function(p){ var a=el('a','chip',p.name); a.href='#p-'+p.id; pb.appendChild(a); });
   }
@@ -276,6 +340,7 @@ function start(D){
   }
   W.forEach(function(s){ addTab(s.id,s.title,s.items.length,function(p){ var blk=el('div','block'); if(s.lead){ var hd=el('header'); hd.appendChild(el('p','lead',s.lead)); blk.appendChild(hd); }
     var l=el('div','wrows'); s.items.forEach(function(x){ l.appendChild(worldRow(x)); }); blk.appendChild(l); p.appendChild(blk); }); });
+  if(D.maps&&D.maps.felix) addTab('map','Карта',D.maps.felix.points.filter(function(p){ return p.ch<=R; }).length,function(p){ p.appendChild(mapBlock('felix',D.maps.felix)); });
   var wsaved=null; try{ wsaved=localStorage.getItem('yus-wsec'); }catch(e){}
   wshow(wsaved||(W[0]&&W[0].id));
 
@@ -323,7 +388,7 @@ function start(D){
     if(tabs.indexOf(h)>-1) return [h,null]; return ['chapter',D.__gated?R:1]; }
   function go(tab,n){ var h=tab==='chapter'&&n?'ch-'+n:(tab==='person'?'p-'+n:tab); if(location.hash.slice(1)===h){ show(tab,n); } else { location.hash=h; } window.scrollTo(0,0); }
   function route(first){ var r=parse(); show(r[0],r[1]);
-    if(r[0]==='brunch'&&r[1]){ var d=document.getElementById('b-'+r[1]); if(d){ d.open=true; d.scrollIntoView({block:'start'}); return; } }
+    if(r[0]==='brunch'&&r[1]){ if(window.__bshow) window.__bshow('diary'); var d=document.getElementById('b-'+r[1]); if(d){ d.open=true; d.scrollIntoView({block:'start'}); return; } }
     if(!first) window.scrollTo(0,0); }
   window.addEventListener('hashchange',function(){ route(false); });
   route(true);

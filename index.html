@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,500;0,700;1,500&family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="style.css?v=2">
+<link rel="stylesheet" href="style.css?v=3">
 </head>
 <body>
 <header class="top">
@@ -66,9 +66,15 @@
   <!-- БРАНЧИ -->
   <section class="view" id="v-brunch" data-view="brunch" hidden>
     <div class="wrap">
-      <div class="block"><header><h2>Бранч с князем Юсуповым</h2><p class="lead">Читательский дневник Ивана Шешокина: 28 утренних встреч с мемуарами и три постскриптума. Публикуется полностью. Под каждой записью — главы, о которых она.</p></header>
-        <div class="chips" id="j-chips" role="group" aria-label="Книги"></div></div>
-      <div class="jlist" id="j-list"></div>
+      <div class="block"><header><h2>Бранч с князем Юсуповым</h2><p class="lead">Читательский дневник Ивана Шешокина: 28 утренних встреч с мемуарами и три постскриптума, полностью. Иван ведёт Telegram-канал <a href="https://t.me/nowineprose" target="_blank" rel="noopener">@nowineprose</a>, где дневник и выходил.</p></header>
+        <div class="chips" id="b-tabs" role="tablist" aria-label="Разделы бранчей"></div></div>
+      <div class="bpanel" id="bp-diary"><div class="chips" id="j-chips" role="group" aria-label="Книги"></div><div class="jlist" id="j-list"></div></div>
+      <div class="bpanel" id="bp-mornings" hidden></div>
+      <div class="bpanel" id="bp-echo" hidden></div>
+      <div class="bpanel" id="bp-enc" hidden></div>
+      <div class="bpanel" id="bp-shelf" hidden></div>
+      <div class="bpanel" id="bp-notes" hidden></div>
+      <div class="bpanel" id="bp-map" hidden></div>
     </div>
   </section>
 
@@ -143,9 +149,9 @@
     </div>
   </section>
 </main>
-<footer class="foot"><div class="wrap"><a href="method.html">Как это сделано</a> · <a href="#front-preface">Предисловие</a> · <a href="#front-readers">Моим читателям</a> · <a href="#front-conclusion">Заключение</a></div></footer>
+<footer class="foot"><div class="wrap"><a href="https://t.me/nowineprose" target="_blank" rel="noopener">Канал Ивана @nowineprose</a> · <a href="method.html">Как это сделано</a> · <a href="#front-preface">Предисловие</a> · <a href="#front-readers">Моим читателям</a> · <a href="#front-conclusion">Заключение</a></div></footer>
 
 <script src="theme.js?v=1"></script>
-<script src="app.js?v=2" defer></script>
+<script src="app.js?v=3" defer></script>
 </body>
 </html>
