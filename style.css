@@ -528,3 +528,6 @@ a.doc-card:hover,a.doc-card:focus-visible{border-color:var(--ink)}
 #rod-tree .gen+.gen{padding-top:12px}
 #rod-tree .gen+.gen::before{height:12px}
 #rod-tree .p{padding:8px 12px}
+.readpos select{width:100%;min-width:0;max-width:100%;text-overflow:ellipsis}
+.readpos .hint{flex-basis:auto}
+.dl-head{position:static}

@@ -36,7 +36,7 @@ function start(D){
   var pill=document.getElementById('where-pill'); pill.textContent=D.__gated?'Читаю: гл. '+lab(R):'1887–1967 · 46 глав';
   pill.addEventListener('click',function(){ go('chapter',D.__gated?R:1); });
   (function(){ var sel=document.getElementById('read-sel');
-    for(var i=1;i<=ALL;i++){ var o=document.createElement('option'); o.value=String(i); o.textContent=(i===ALL?'до конца (всё открыто)':'гл. '+lab(i)+' · '+D.chapters[i-1].title); sel.appendChild(o); }
+    for(var i=1;i<=ALL;i++){ var o=document.createElement('option'); o.value=String(i); o.textContent=(i===ALL?'до конца (всё открыто)':'гл. '+lab(i)+' · '+D.chapters[i-1].title.slice(0,28)+(D.chapters[i-1].title.length>28?'…':'')); sel.appendChild(o); }
     sel.value=String(R); sel.addEventListener('change',function(){ try{ if(+sel.value>=ALL) localStorage.removeItem('yus-read'); else localStorage.setItem('yus-read',sel.value); }catch(e){} location.reload(); });
     document.getElementById('read-note').textContent=D.__gated?'Скрыто всё, что после главы '+lab(R)+'. Справки о людях и Заключение откроются в конце.':'Иван книгу прочитал, поэтому открыто всё. Читаете сами? Выберите главу, и дальнейшее скроется.';
   })();
