@@ -226,7 +226,7 @@ function start(D){
   // МИР
   var COM='https://commons.wikimedia.org/wiki/';
   function figure(im){
-    var f=el('figure','wimg'+(im.color?' color':'')), a=el('a'), page=im.file&&!/^img\//.test(im.file)?COM+'File:'+encodeURIComponent(im.file.replace(/ /g,'_')):(im.page||null);
+    var f=el('figure','wimg'+(im.color?' color':'')), a=el('a'), page=im.page||(im.file&&!/^img\//.test(im.file)?COM+'File:'+encodeURIComponent(im.file.replace(/ /g,'_')):null);
     a.href=im.full||im.src; a.addEventListener('click',function(e){ e.preventDefault(); openLb(im,page); });
     var img=el('img'); img.loading='lazy'; img.decoding='async'; img.alt=im.cap||''; img.src=im.src;
     img.addEventListener('error',function(){ f.remove(); }); a.appendChild(img); f.appendChild(a);

@@ -28,6 +28,40 @@ def search(q: str):
             return pg['title'].removeprefix('File:'), ii.get('thumburl') or ii['url']
     return None, None
 
+def wiki(q: str, lang: str):
+    """Главная картинка статьи Википедии по запросу: (имя файла, url)."""
+    p = {'action': 'query', 'format': 'json', 'generator': 'search', 'gsrlimit': 3, 'gsrsearch': q,
+         'prop': 'pageimages', 'piprop': 'thumbnail|name', 'pithumbsize': 1600}
+    pages = json.loads(get(f'https://{lang}.wikipedia.org/w/api.php?' + urllib.parse.urlencode(p))).get('query', {}).get('pages', {})
+    for pg in sorted(pages.values(), key=lambda x: x.get('index', 99)):
+        if pg.get('thumbnail') and not pg.get('pageimage', '').lower().endswith('.svg'):
+            return pg['pageimage'], pg['thumbnail']['source']
+    return None, None
+
+def article(spec: str):
+    """img.wiki = 'ru:Название статьи' → главная картинка этой статьи."""
+    lang, title = spec.split(':', 1)
+    p = {'action': 'query', 'format': 'json', 'titles': title, 'redirects': 1, 'prop': 'pageimages', 'piprop': 'thumbnail|name', 'pithumbsize': 1600}
+    for pg in json.loads(get(f'https://{lang}.wikipedia.org/w/api.php?' + urllib.parse.urlencode(p))).get('query', {}).get('pages', {}).values():
+        if pg.get('thumbnail'):
+            return pg['pageimage'], pg['thumbnail']['source']
+    return None, None
+
+def find(q: str):
+    """Commons по полному запросу → английская/русская Википедия → Commons по укороченному запросу."""
+    name, url = search(q)
+    if url: return name, url
+    for lang in ('en', 'ru'):
+        name, url = wiki(q, lang)
+        if url: return name, url
+    w = q.split()
+    for k in range(len(w) - 1, 1, -1):
+        name, url = search(' '.join(w[:k]))
+        if url: return name, url
+        name, url = wiki(' '.join(w[:k]), 'en')
+        if url: return name, url
+    return None, None
+
 def items(d):
     for s in d.get('world', []):
         for it in s['items']:
@@ -41,7 +75,7 @@ def main() -> int:
     for im in items(d):
         if im.get('src', '').startswith('img/book/'):
             continue
-        key = im.get('q') or im.get('file') or im.get('url')
+        key = im.get('wiki') or im.get('q') or im.get('file') or im.get('url')
         if not key:
             continue
         slug = hashlib.sha1(key.encode()).hexdigest()[:12] + '.jpg'
@@ -50,10 +84,27 @@ def main() -> int:
             try:
                 if im.get('url'):
                     url = im['url']
-                elif im.get('file'):
+                elif im.get('wiki'):
+                    name, url = article(im['wiki'])
+                    if url:
+                        lang, title = im['wiki'].split(':', 1)
+                        im['page'] = f'https://{lang}.wikipedia.org/wiki/' + urllib.parse.quote(title.replace(' ', '_')); im['credit'] = 'Википедия'
+                    if not url and im.get('q'):
+                        name, url = find(im['q'])
+                    if not url:
+                        failed.append(key); print('NONE', key); continue
+                    im['file'] = name; changed = True
+                elif im.get('file') and not im.get('q'):
                     url = 'https://commons.wikimedia.org/wiki/Special:FilePath/' + urllib.parse.quote(im['file'].replace(' ', '_')) + '?width=1600'
+                    try:
+                        get(url[:-11] + '?width=64')
+                    except Exception:  # noqa: BLE001 — файла нет: ищем по имени
+                        name, url = find(im['file'].rsplit('.', 1)[0])
+                        if not url:
+                            failed.append(key); print('NONE', key); continue
+                        im['file'] = name; changed = True
                 else:
-                    name, url = search(im['q'])
+                    name, url = find(im['q'])
                     if not url:
                         failed.append(key); print('NONE', key); continue
                     im['file'] = name; changed = True

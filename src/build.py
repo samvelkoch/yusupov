@@ -19,8 +19,8 @@ if OUT.exists():
     for s_ in json.load(open(OUT)).get('world',[]):
         for it in s_['items']:
             im=it.get('img') or {}
-            k=im.get('q') or im.get('url')
-            if k and im.get('src'): OLD[k]={kk:im[kk] for kk in ('src','full','file') if kk in im}
+            k=im.get('wiki') or im.get('q') or im.get('url')
+            if k and im.get('src'): OLD[k]={kk:im[kk] for kk in ('src','full','file','page','credit') if kk in im}
 world={s[0]:[] for s in SECS}; pev={}; ord_=0
 for n in range(1,47):
     c=json.load(open(W/f'data/ch{n:02d}.json')); key=f'b1ch{n:02d}' if n<=27 else f'b2ch{n-27:02d}'
@@ -32,7 +32,7 @@ for n in range(1,47):
     for x in c['world']:
         x=dict(x); x['ch']=n; sec=x.pop('sec'); im=x.get('img')
         if im and im.get('file','').startswith('img/'): im['src']=im['full']=im.pop('file'); im['credit']='из издания «Мемуаров»'
-        if im and (im.get('q') or im.get('url')) in OLD: im.update(OLD[im.get('q') or im.get('url')])
+        if im and (im.get('wiki') or im.get('q') or im.get('url')) in OLD: im.update(OLD[im.get('wiki') or im.get('q') or im.get('url')])
         world[sec].append(x)
     for pid,txt in c['people'].items(): pev.setdefault(pid,[]).append({'ch':n,'t':txt})
 D['timeline'].sort(key=lambda e:(e['y'],e['ch']))
