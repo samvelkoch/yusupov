@@ -63,10 +63,16 @@ def find(q: str):
     return None, None
 
 def items(d):
-    for s in d.get('world', []):
-        for it in s['items']:
-            if it.get('img'):
-                yield it['img']
+    """Все словари под ключом img: мир, «Мир Ивана», карты."""
+    if isinstance(d, dict):
+        for k, v in d.items():
+            if k == 'img' and isinstance(v, dict):
+                yield v
+            else:
+                yield from items(v)
+    elif isinstance(d, list):
+        for x in d:
+            yield from items(x)
 
 def main() -> int:
     d = json.loads(DATA.read_text(encoding='utf-8'))

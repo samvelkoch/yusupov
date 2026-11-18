@@ -84,8 +84,14 @@ function start(D){
     var b=el('div','jbody');
     e.segs.forEach(function(s){ if(segFilter&&!segFilter(s)) return; richP(s.p,b);
       if(s.read){ var r=el('p','jread',s.read); if(s.ch){ r.appendChild(document.createTextNode(' · ')); nums(s.ch).forEach(function(n,i){ if(n>R) return; if(i) r.appendChild(document.createTextNode(' ')); r.appendChild(chLink(n)); }); } b.appendChild(r); } });
+    var ps=bPics(e.n); if(ps.length){ var st=el('div','bpics'); ps.forEach(function(x){ var f=figure(x.img); var fc=f.querySelector('figcaption'); fc.insertBefore(el('span',null,x.t),fc.firstChild); st.appendChild(f); }); b.appendChild(st); }
     d.appendChild(b); return d;
   }
+  // фото к бранчу: из энциклопедии Ивана и с его карты, без повторов
+  function bPics(n){ var IVd=D.ivan||{}, seen={}, out=[];
+    (IVd.enc||[]).map(function(x){ return [x.b,x.title,x.img]; }).concat(((D.maps||{}).ivan||{points:[]}).points.map(function(x){ return [x.b,x.name,x.img]; }))
+      .forEach(function(x){ if(x[0]!==n||!x[2]||!x[2].src||seen[x[2].src]) return; seen[x[2].src]=1; out.push({t:x[1],img:x[2]}); });
+    return out.slice(0,3); }
   (function(){ var jl=document.getElementById('j-list'), jc=document.getElementById('j-chips');
     var groups=[['Книга первая',function(e){ var n=nums(e.ch); return n.length&&n[0]<=27; }],['Книга вторая',function(e){ var n=nums(e.ch); return n.length&&n[0]>27; }],['Постскриптумы',function(e){ return !e.ch; }]];
     groups.forEach(function(g,i){ var es=JE.filter(g[1]); if(!es.length) return;
@@ -118,10 +124,10 @@ function start(D){
       enc:function(p){ p.appendChild(el('p','lead bp-lead','Что Иван подсвечивает сам: его «матчасть», места, люди и книги из его мира, параллели с сегодняшним днём и то, что стояло на столе. Сначала его слова, ниже, отдельно, — наша справка.'));
         var cats=IV.cats||{}; Object.keys(cats).forEach(function(k){ var its=(IV.enc||[]).filter(function(x){ return x.cat===k; }); if(!its.length) return;
           p.appendChild(el('p','jgroup',cats[k])); var w=el('div','enc');
-          its.forEach(function(x){ var c=el('article','card enc-c'); var t=el('div','mtop'); t.appendChild(el('h3',null,x.title)); t.appendChild(bLink(x.b)); c.appendChild(t);
+          its.forEach(function(x){ var c=el('article','card enc-c'); if(x.img&&x.img.src) c.appendChild(figure(x.img)); var t=el('div','mtop'); t.appendChild(el('h3',null,x.title)); t.appendChild(bLink(x.b)); c.appendChild(t);
             c.appendChild(el('blockquote',null,'«'+x.ivan+'»')); if(x.note){ var n=el('p','enc-n'); n.appendChild(el('span','kind fact','Справка')); n.appendChild(document.createTextNode(' '+x.note)); c.appendChild(n); } w.appendChild(c); }); p.appendChild(w); }); },
       shelf:function(p){ p.appendChild(el('p','lead bp-lead','Список литературы Ивана из постскриптума: книги, которые всплывали в разговорах с князем. Под каждой — почему она связана с мемуарами.'));
-        var w=el('div','shelf'); (IV.shelf||[]).forEach(function(x){ var c=el('article','card book'); c.appendChild(el('b','bk-t',x.t)); c.appendChild(el('span','bk-a',x.a)); c.appendChild(el('p',null,x.why)); var m=el('div','mtop'); m.appendChild(bLink(x.b)); if(x.ch&&x.ch<=R) m.appendChild(chLink(x.ch)); c.appendChild(m); w.appendChild(c); }); p.appendChild(w); },
+        var w=el('div','shelf'); (IV.shelf||[]).forEach(function(x){ var c=el('article','card book'); if(x.img&&x.img.src) c.appendChild(figure(x.img)); c.appendChild(el('b','bk-t',x.t)); c.appendChild(el('span','bk-a',x.a)); c.appendChild(el('p',null,x.why)); var m=el('div','mtop'); m.appendChild(bLink(x.b)); if(x.ch&&x.ch<=R) m.appendChild(chLink(x.ch)); c.appendChild(m); w.appendChild(c); }); p.appendChild(w); },
       notes:function(p){ p.appendChild(el('p','lead bp-lead','Сквозные темы, к которым Иван возвращается в разных бранчах.'));
         (IV.notes||[]).forEach(function(x){ var c=el('article','card note'); c.appendChild(el('h3',null,x.title)); c.appendChild(el('blockquote',null,'«'+x.ivan+'»')); var m=el('div','mtop'); x.b.forEach(function(n){ m.appendChild(bLink(n)); }); c.appendChild(m); p.appendChild(c); }); },
       map:function(p){ p.appendChild(mapBlock('ivan',D.maps.ivan,function(pt){ return [bLink(pt.b)]; })); }
@@ -130,7 +136,7 @@ function start(D){
     var sv=null; try{ sv=localStorage.getItem('yus-btab'); }catch(e){} bshow(sv&&document.getElementById('bt-'+sv)?sv:'diary');
   })();
 
-  // КАРТЫ: Leaflet подгружается по требованию, подложка CARTO (светлая/тёмная по теме)
+  // КАРТЫ: Leaflet подгружается по требованию, подложка Esri Canvas (светлая/тёмная по теме)
   var LL=null;
   function loadLeaflet(){ if(LL) return LL; LL=new Promise(function(ok,no){ var c=document.createElement('link'); c.rel='stylesheet'; c.href='vendor/leaflet/leaflet.css'; document.head.appendChild(c);
     var s=document.createElement('script'); s.src='vendor/leaflet/leaflet.js'; s.onload=function(){ ok(window.L); }; s.onerror=no; document.head.appendChild(s); }); return LL; }
@@ -139,10 +145,14 @@ function start(D){
     var blk=el('div','block map-block'); blk.id='map-'+id; var hd=el('header'); hd.appendChild(el('h3',null,M.title)); if(M.lead) hd.appendChild(el('p','lead',M.lead)); blk.appendChild(hd);
     var wrap=el('div','map-wrap'), box=el('div','lmap'); wrap.appendChild(box); var ol=el('ol','map-legend'); wrap.appendChild(ol); blk.appendChild(wrap);
     var pts=M.points.filter(function(p){ return !p.ch||p.ch<=R; }).sort(function(a,b){ return (a.ch||a.b||0)-(b.ch||b.b||0); }), marks=[];
-    pts.forEach(function(p,i){ var li=el('li'); li.dataset.n=i+1; li.tabIndex=0; li.appendChild(el('span','pin',String(i+1))); var t=el('div'); t.appendChild(el('b',null,p.name)); t.appendChild(document.createTextNode(' '+p.text)); var w=el('span','chs'); (p.ch?[chLink(p.ch)]:links(p)).forEach(function(a){ w.appendChild(a); }); t.appendChild(w); li.appendChild(t); ol.appendChild(li); });
+    pts.forEach(function(p,i){ var li=el('li'); li.dataset.n=i+1; li.tabIndex=0; li.appendChild(el('span','pin',String(i+1))); var t=el('div'); if(p.img&&p.img.src){ var th=el('img','lthumb'); th.src=p.img.src; th.alt=''; th.loading='lazy'; th.addEventListener('error',function(){ th.remove(); }); t.appendChild(th); } t.appendChild(el('b',null,p.name)); t.appendChild(document.createTextNode(' '+p.text)); var w=el('span','chs'); (p.ch?[chLink(p.ch)]:links(p)).forEach(function(a){ w.appendChild(a); }); t.appendChild(w); li.appendChild(t); ol.appendChild(li); });
     loadLeaflet().then(function(L){
       var map=L.map(box,{scrollWheelZoom:false,attributionControl:true}); var dark=isDark();
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/'+(dark?'dark_all':'light_all')+'/{z}/{x}/{y}{r}.png',{attribution:'© OpenStreetMap, © CARTO',subdomains:'abcd',maxZoom:18}).addTo(map);
+      // Esri Canvas: без ключа, серая (светлая/тёмная по теме); если не грузится — OSM, обесцвеченная CSS
+      var ESRI='https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_'+(dark?'Dark':'Light')+'_Gray_', at='© Esri, HERE, OpenStreetMap';
+      var base=L.tileLayer(ESRI+'Base/MapServer/tile/{z}/{y}/{x}',{attribution:at,maxZoom:16}).addTo(map), ref=L.tileLayer(ESRI+'Reference/MapServer/tile/{z}/{y}/{x}',{maxZoom:16}).addTo(map), bad=0;
+      base.on('tileerror',function(){ if(++bad!==4) return; map.removeLayer(base); map.removeLayer(ref); box.classList.add('osm');
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap',maxZoom:18}).addTo(map); });
       var line=[]; pts.forEach(function(p,i){ var m=L.marker(p.ll,{icon:L.divIcon({className:'lpin',html:'<span>'+(i+1)+'</span>',iconSize:[24,24],iconAnchor:[12,12]})}).addTo(map); m.on('click',function(){ hl(i+1,false); }); marks.push(m); line.push(p.ll); });
       if(id==='felix') L.polyline(line,{color:dark?'#bbb':'#555',weight:1,opacity:.6,dashArray:'3 5'}).addTo(map);
       map.fitBounds(L.latLngBounds(line).pad(.1)); blk.__map=map;

@@ -14,13 +14,20 @@ SECS=[('rod','Род и дома','Предки, родня и их дворцы
       ('time','Время','События, без которых мемуары не понять.'),('art','Искусство','Коллекции, театр, мода.'),('books','Книги','Что читать дальше: источники и споры.')]
 D={'themes':THEMES,'parts':[{'n':1,'name':'Книга первая. До изгнания','years':'1887–1919','a':1,'b':27},{'n':2,'name':'Книга вторая. В изгнании','years':'1919–1953','a':28,'b':46}],
    'chapters':[],'quotes':[],'timeline':[],'world':[],'profiles':[],'diary':{},'front':{},'current':{'ch':46}}
+def imgs(o):
+    '''Все словари под ключом img в любом месте данных.'''
+    if isinstance(o,dict):
+        for k,v in o.items():
+            if k=='img' and isinstance(v,dict): yield v
+            else: yield from imgs(v)
+    elif isinstance(o,list):
+        for x in o: yield from imgs(x)
+ikey=lambda im: im.get('wiki') or im.get('q') or im.get('url') or im.get('file')
 OLD={}
 if OUT.exists():
-    for s_ in json.load(open(OUT)).get('world',[]):
-        for it in s_['items']:
-            im=it.get('img') or {}
-            k=im.get('wiki') or im.get('q') or im.get('url') or im.get('file')
-            if k and im.get('src'): OLD[k]={kk:im[kk] for kk in ('src','full','file','page','credit') if kk in im}
+    for im in imgs(json.load(open(OUT))):
+        k=ikey(im)
+        if k and im.get('src'): OLD[k]={kk:im[kk] for kk in ('src','full','file','page','credit') if kk in im}
 world={s[0]:[] for s in SECS}; pev={}; ord_=0
 for n in range(1,47):
     c=json.load(open(W/f'data/ch{n:02d}.json')); key=f'b1ch{n:02d}' if n<=27 else f'b2ch{n-27:02d}'
@@ -72,5 +79,8 @@ for k,v in fr.items(): D['front'][k]={'title':v['title'],'by':v['by'],'p':md(v['
 D['rod']=json.load(open(W/'data/rod.json'))
 D['ivan']=json.load(open(W/'data/ivan.json'))
 D['maps']=json.load(open(W/'data/maps.json'))
+D['krug']=json.load(open(W/'data/krug.json'))
+for im in list(imgs(D['ivan']))+list(imgs(D['maps'])):
+    if ikey(im) in OLD: im.update(OLD[ikey(im)])
 OUT.write_text(json.dumps(D,ensure_ascii=False,separators=(',',':')),encoding='utf8')
 print('chapters',len(D['chapters']),'quotes',len(D['quotes']),'tl',len(D['timeline']),'world',sum(len(s['items']) for s in D['world']),'profiles',len(D['profiles']),'size',OUT.stat().st_size//1024,'KB')

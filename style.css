@@ -569,3 +569,29 @@ a.doc-card:hover,a.doc-card:focus-visible{border-color:var(--ink)}
 .lpin.on span{transform:scale(1.35);background:var(--surface);color:var(--ink);border-color:var(--ink)}
 .lpin.on{z-index:1000!important}
 .leaflet-container{font:inherit}
+/* Круг */
+.kr-ctl{display:flex;flex-direction:column;gap:10px;margin-bottom:12px}
+.kr-ctl .search{max-width:320px}
+.kr-sw{display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--ink);margin-right:6px;vertical-align:-1px}
+.kr-grid{display:grid;grid-template-columns:1fr;gap:16px;align-items:start}
+@media (min-width:1000px){.kr-grid{grid-template-columns:minmax(0,3fr) minmax(0,2fr)}}
+.kr-svg{background:var(--surface);border:1px solid var(--rule);border-radius:14px;overflow:hidden}
+.kr-rib{fill:var(--ink);transition:opacity .15s}
+.kr-arc{fill:var(--ink);cursor:pointer;transition:opacity .15s}
+.kr-arc.sel{stroke:var(--ink);stroke-width:1.5}
+.kr-lbl{fill:var(--ink);font-family:var(--f-body);pointer-events:none;paint-order:stroke;stroke:var(--surface);stroke-width:3px}
+.kr-card h3{margin:2px 0 6px}
+.kr-card h4{margin:14px 0 6px;font:600 .78rem var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.kr-tiles{display:flex;gap:10px;margin-top:10px}
+.kr-tile{flex:1;border:1px solid var(--rule);border-radius:10px;padding:8px 10px}
+.kr-tile b{display:block;font:600 1.3rem var(--f-display)}
+.kr-tile span{font-size:.8rem;color:var(--muted)}
+.kr-q{margin:8px 0;font-family:var(--f-display);font-size:.98em;line-height:1.5;border-left:3px solid var(--rule);padding-left:10px}
+
+/* фото в «Мире Ивана» */
+.bpics{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-top:16px}
+.enc-c .wimg,.book .wimg{margin:0 0 10px}
+.book .wimg>a{padding-top:62%}
+.lthumb{float:right;width:56px;height:56px;object-fit:cover;border-radius:6px;filter:grayscale(1);margin:2px 0 4px 10px}
+.lmap.osm .leaflet-tile-pane{filter:grayscale(1) contrast(.9) brightness(1.04)}
+:root[data-theme="dark"] .lmap.osm .leaflet-tile-pane,:root[data-theme="night"] .lmap.osm .leaflet-tile-pane{filter:grayscale(1) invert(1) brightness(.85)}
