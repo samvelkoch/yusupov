@@ -595,3 +595,7 @@ a.doc-card:hover,a.doc-card:focus-visible{border-color:var(--ink)}
 .lthumb{float:right;width:56px;height:56px;object-fit:cover;border-radius:6px;filter:grayscale(1);margin:2px 0 4px 10px}
 .lmap.osm .leaflet-tile-pane{filter:grayscale(1) contrast(.9) brightness(1.04)}
 :root[data-theme="dark"] .lmap.osm .leaflet-tile-pane,:root[data-theme="night"] .lmap.osm .leaflet-tile-pane{filter:grayscale(1) invert(1) brightness(.85)}
+/* отступы: шапка бранча, значок «Справка» в строке */
+.jtop{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
+.enc-n .kind{display:inline-block;padding:3px 6px;line-height:1.2;vertical-align:1px;margin-right:4px}
+.enc-n{line-height:1.6}

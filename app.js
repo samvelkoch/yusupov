@@ -147,7 +147,7 @@ function start(D){
     var pts=M.points.filter(function(p){ return !p.ch||p.ch<=R; }).sort(function(a,b){ return (a.ch||a.b||0)-(b.ch||b.b||0); }), marks=[];
     pts.forEach(function(p,i){ var li=el('li'); li.dataset.n=i+1; li.tabIndex=0; li.appendChild(el('span','pin',String(i+1))); var t=el('div'); if(p.img&&p.img.src){ var th=el('img','lthumb'); th.src=p.img.src; th.alt=''; th.loading='lazy'; th.addEventListener('error',function(){ th.remove(); }); t.appendChild(th); } t.appendChild(el('b',null,p.name)); t.appendChild(document.createTextNode(' '+p.text)); var w=el('span','chs'); (p.ch?[chLink(p.ch)]:links(p)).forEach(function(a){ w.appendChild(a); }); t.appendChild(w); li.appendChild(t); ol.appendChild(li); });
     loadLeaflet().then(function(L){
-      var map=L.map(box,{scrollWheelZoom:false,attributionControl:true}); var dark=isDark();
+      var map=L.map(box,{scrollWheelZoom:false,attributionControl:true}); map.attributionControl.setPrefix(false); var dark=isDark();
       // Esri Canvas: без ключа, серая (светлая/тёмная по теме); если не грузится — OSM, обесцвеченная CSS
       var ESRI='https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_'+(dark?'Dark':'Light')+'_Gray_', at='© Esri, HERE, OpenStreetMap';
       var base=L.tileLayer(ESRI+'Base/MapServer/tile/{z}/{y}/{x}',{attribution:at,maxZoom:16}).addTo(map), ref=L.tileLayer(ESRI+'Reference/MapServer/tile/{z}/{y}/{x}',{maxZoom:16}).addTo(map), bad=0;
