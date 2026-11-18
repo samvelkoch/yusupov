@@ -1,1 +1,151 @@
-<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Бранч с князем · Юсупов</title><link rel="stylesheet" href="style.css"></head><body><main class="wrap" style="padding:40px 16px"><h1>Бранч с князем</h1><p>Читательский дневник к «Мемуарам» князя Феликса Юсупова. Сайт строится.</p></main></body></html>
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Бранч с князем · Юсупов</title>
+<meta name="description" content="Читательский спутник к мемуарам князя Феликса Юсупова: главы, история, люди, цитаты и читательский дневник Ивана Шешокина «Бранч с князем».">
+<meta name="theme-color" content="#f5f5f5">
+<script>(function(){var m='light';try{m=localStorage.getItem('yus-theme-mode')||'light';}catch(e){}if(m!=='auto')document.documentElement.setAttribute('data-theme',m);})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,500;0,700;1,500&family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="style.css?v=1">
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="top-row"><p class="eyebrow">Читательский дневник Ивана Шешокина · Феликс Юсупов, «Мемуары»</p><button class="theme-btn" id="theme-btn" type="button" aria-label="Тема оформления"></button></div>
+    <div class="brand">
+      <h1>Бранч <em>с князем</em></h1>
+      <button class="where-pill" id="where-pill" type="button"></button>
+    </div>
+    <div class="progress"><div class="bar"><i id="bar"></i></div><button type="button" class="pct-btn" id="pct-btn" aria-expanded="false" aria-controls="readpos"><span id="pct"></span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      <div class="readpos" id="readpos" hidden><label for="read-sel">Я прочитал(а) до главы</label><select id="read-sel"></select><p class="hint" id="read-note"></p></div></div>
+  </div>
+</header>
+
+<nav class="tabbar" aria-label="Разделы">
+  <div class="in">
+    <a href="#chapter" data-tab="chapter"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v16H5.5C4.7 20 4 19.3 4 18.5z"/><path d="M13 4h5.5c.8 0 1.5.7 1.5 1.5v13c0 .8-.7 1.5-1.5 1.5H13z"/></svg>Глава</a>
+    <a href="#brunch" data-tab="brunch"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9h12v4a6 6 0 0 1-12 0z"/><path d="M17 10h1.5a2.5 2.5 0 0 1 0 5H16"/><path d="M8 3.5c0 1.5 1 1.5 1 3M12 3.5c0 1.5 1 1.5 1 3"/></svg>Бранчи</a>
+    <a href="#quotes" data-tab="quotes"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h4v4c0 3-1.5 5-4 6"/><path d="M14 7h4v4c0 3-1.5 5-4 6"/></svg>Цитаты</a>
+    <a href="#people" data-tab="people"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3 19c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.5"/><path d="M16 13.2c2.8.4 5 2.8 5 5.8"/></svg>Люди</a>
+    <a href="#rod" data-tab="rod"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="4" rx="1"/><rect x="3" y="17" width="6" height="4" rx="1"/><rect x="15" y="17" width="6" height="4" rx="1"/><path d="M12 7v5M6 17v-5h12v5"/></svg>Род</a>
+    <a href="#time" data-tab="time"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h10M4 18h13"/></svg>Время</a>
+    <a href="#world" data-tab="world"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.5 2.6 3.6 5.4 3.6 8.5s-1.1 5.9-3.6 8.5M12 3.5C9.5 6.1 8.4 8.9 8.4 12s1.1 5.9 3.6 8.5"/></svg>Мир</a>
+  </div>
+</nav>
+
+<main>
+  <!-- ГЛАВА -->
+  <section class="view" id="v-chapter" data-view="chapter">
+    <div class="wrap">
+      <div class="chpick">
+        <button type="button" class="cp-step" id="cp-prev" aria-label="Предыдущая глава">←</button>
+        <button type="button" class="cp-main" id="cp-open" aria-expanded="false" aria-controls="cp-grid"><span id="cp-label"></span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+        <button type="button" class="cp-step" id="cp-next" aria-label="Следующая глава">→</button>
+        <div class="cp-grid" id="cp-grid" hidden></div>
+      </div>
+      <div class="ch-head">
+        <p class="eyebrow" id="ch-eyebrow"></p>
+        <h2 id="ch-title"></h2>
+        <p class="ch-topics" id="ch-topics"></p>
+      </div>
+      <div class="block"><ul class="summary" id="ch-summary"></ul><div class="front-links" id="ch-front"></div></div>
+      <div class="block" id="ch-p-block"><header><h3>Люди главы</h3></header><div class="pchips" id="ch-people"></div></div>
+      <div class="block" id="ch-j-block"><header><h3>Бранч с князем</h3><p class="lead">Что Иван записал, дочитав до этого места. Целиком, его голосом.</p></header><div class="jlist" id="ch-journal"></div><a class="more-link" href="#brunch">Все бранчи →</a></div>
+      <div class="block" id="ch-ctx-block"><header><h3>Контекст</h3><p class="lead">История вокруг главы и поправки к Феликсу. <span class="kind fact">Факт</span> отдельно от <span class="kind reading">Трактовки</span>.</p></header><div class="card"><ul class="ctx-list" id="ch-ctx"></ul></div></div>
+      <div class="block" id="ch-q-block"><header><h3>Цитаты главы</h3></header><div class="quotes" id="ch-quotes"></div></div>
+      <div class="block" id="ch-w-block"><header><h3>Мир вокруг главы</h3></header><div class="wlist" id="ch-world"></div><a class="more-link" href="#world">Весь мир мемуаров →</a></div>
+      <div class="block" id="ch-t-block"><header><h3>Даты главы</h3></header><ol class="tl" id="ch-tl"></ol><a class="more-link" href="#time">Вся хронология →</a></div>
+      <div class="ch-nav"><button type="button" id="ch-prev">← Предыдущая</button><button type="button" id="ch-next">Следующая →</button></div>
+    </div>
+  </section>
+
+  <!-- БРАНЧИ -->
+  <section class="view" id="v-brunch" data-view="brunch" hidden>
+    <div class="wrap">
+      <div class="block"><header><h2>Бранч с князем Юсуповым</h2><p class="lead">Читательский дневник Ивана Шешокина: 28 утренних встреч с мемуарами и три постскриптума. Публикуется полностью. Под каждой записью — главы, о которых она.</p></header>
+        <div class="chips" id="j-chips" role="group" aria-label="Книги"></div></div>
+      <div class="jlist" id="j-list"></div>
+    </div>
+  </section>
+
+  <!-- ЦИТАТЫ -->
+  <section class="view" id="v-quotes" data-view="quotes" hidden>
+    <div class="wrap">
+      <div class="block">
+        <header><h2>Цитаты</h2><p class="lead">Феликс дословно. Отмеченное Иваном в дневнике — тема «Отметил Иван», подборка Claude — пунктирная рамка. Под каждой цитатой контекст и комментарий.</p></header>
+        <div class="chips" id="q-chips" role="group" aria-label="Темы"></div>
+        <div class="quotes" id="qlist"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ЛЮДИ -->
+  <section class="view" id="v-people" data-view="people" hidden>
+    <div class="wrap">
+      <div class="block">
+        <header><h2>Люди мемуаров</h2><p class="lead">Справка о каждом: кто это на самом деле, что о нём в каждой главе, цитаты. Имя открывает страницу.</p></header>
+        <div class="chips" id="cast-jump" role="group" aria-label="Группы"></div>
+        <input class="search" id="cast-q" type="search" placeholder="Найти человека: имя или роль" aria-label="Найти человека" autocomplete="off">
+        <div id="prof-grid"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- РОД -->
+  <section class="view" id="v-rod" data-view="rod" hidden>
+    <div class="wrap">
+      <div class="block"><header><h2>Род Юсуповых</h2><p class="lead" id="rod-lead"></p></header>
+        <div class="families" id="rod-tree"></div></div>
+      <div class="block"><header><h3>Схема из книги</h3></header><div class="wlist" id="rod-scheme"></div></div>
+      <div class="block"><header><h3>Фотографии из книги</h3><p class="lead">Восемь вклеек издания. Нажмите, чтобы увеличить.</p></header><div class="photos" id="rod-photos"></div></div>
+    </div>
+  </section>
+
+  <!-- ВРЕМЯ -->
+  <section class="view" id="v-time" data-view="time" hidden>
+    <div class="wrap">
+      <div class="block">
+        <header><h2>Две шкалы: история и Феликс</h2><p class="lead">Слева — события эпохи, справа — жизнь Феликса и его семьи. По десятилетиям.</p></header>
+        <div class="dual" id="dual"></div>
+      </div>
+      <div class="block">
+        <header><h3>Кто в какой главе</h3><p class="lead">I и II — две книги мемуаров. Клетка открывает главу, имя — справку.</p></header>
+        <div class="swim" id="swim-people"></div>
+      </div>
+      <div class="block">
+        <header><h3>Хронология</h3><p class="lead">Все даты подряд. Даты в книге — по новому стилю; где Феликс ошибается, это сказано в «Контексте» главы.</p></header>
+        <div class="legend"><span style="--c:var(--lupine)">Феликс</span><span style="--c:var(--poppy)">Род и семья</span><span style="--c:var(--valley)">История</span></div>
+        <ol class="tl" id="tl"></ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- ФРОНТ -->
+  <section class="view" id="v-front" data-view="front" hidden>
+    <div class="wrap" id="front"></div>
+  </section>
+  <!-- ЧЕЛОВЕК -->
+  <section class="view" id="v-person" data-view="person" hidden>
+    <div class="wrap" id="person"></div>
+  </section>
+  <!-- МИР -->
+  <section class="view" id="v-world" data-view="world" hidden>
+    <div class="wrap">
+      <div class="block">
+        <header><h2>Мир мемуаров</h2><p class="lead">Люди, места, события и книги вокруг Феликса. Выберите раздел; строка раскрывается.</p></header>
+        <div class="chips" id="w-chips" role="toolbar" aria-label="Разделы мира"></div>
+      </div>
+      <div id="w-sections"></div>
+    </div>
+  </section>
+</main>
+<footer class="foot"><div class="wrap"><a href="method.html">Как это сделано</a> · <a href="#front-preface">Предисловие</a> · <a href="#front-readers">Моим читателям</a> · <a href="#front-conclusion">Заключение</a></div></footer>
+
+<script src="theme.js?v=1"></script>
+<script src="app.js?v=1" defer></script>
+</body>
+</html>

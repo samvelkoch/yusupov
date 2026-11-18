@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Как сделан «Бранч с князем»</title>
+<meta name="description" content="Как устроен сайт-спутник к мемуарам Феликса Юсупова и читательскому дневнику Ивана Шешокина.">
+<meta name="theme-color" content="#f5f5f5">
+<script>(function(){var m='light';try{m=localStorage.getItem('yus-theme-mode')||'light';}catch(e){}if(m!=='auto')document.documentElement.setAttribute('data-theme',m);})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,500;0,700;1,500&family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="style.css?v=1">
+</head>
+<body class="doc">
+<header class="top">
+  <div class="wrap">
+    <div class="top-row"><a class="back" href="./">← К бранчам</a><button class="theme-btn" id="theme-btn" type="button" aria-label="Тема оформления"></button></div>
+  </div>
+</header>
+
+<main class="wrap doc-main">
+  <header class="doc-head">
+    <p class="eyebrow">Как это сделано</p>
+    <h1>Мемуары, дневник <em>и всё вокруг</em></h1>
+    <p class="doc-lead">Иван Шешокин прочитал «Мемуары» Феликса Юсупова за 28 утренних «бранчей» и вёл об этом дневник. Этот сайт собирает в одном месте три голоса: самого Феликса, Ивана и историю, которая проверяет обоих.</p>
+  </header>
+
+  <nav class="doc-toc" aria-label="Содержание">
+    <a href="#idea">Идея</a><a href="#principles">Принципы</a><a href="#sections">Разделы</a><a href="#tech">Как устроено</a>
+  </nav>
+
+  <section id="idea" class="doc-sec">
+    <h2>Идея</h2>
+    <p>Мемуары Юсупова — книга документальная, но очень личная. Феликс рассказывает о роде, о детстве в самых богатых домах России, о Распутине, революции и сорока годах изгнания. Он обаятелен, ироничен и не всегда точен: путает даты, обходит неудобное, судит людей пристрастно.</p>
+    <p>Поэтому к каждой главе здесь приложено то, чего в книге нет: что происходило в стране и в мире, кто эти люди на самом деле, где Феликс ошибается. А рядом — дневник Ивана: живая читательская реакция, целиком и его голосом.</p>
+    <p>Сайт сделан по образцу <a href="https://samvelkoch.github.io/eastofeden/">дневника «К востоку от Эдема»</a>: тот же дизайн и те же темы оформления.</p>
+  </section>
+
+  <section id="principles" class="doc-sec">
+    <h2>Принципы</h2>
+    <ol class="doc-steps">
+      <li><b>Дневник Ивана не пересказываем.</b> Все 28 записей и три постскриптума опубликованы полностью, без правки. Каждая привязана к главам, которые Иван прочитал перед ней.</li>
+      <li><b>Цитаты дословные.</b> Все 243 цитаты автоматически сверены с текстом издания. Подборку дополнил Claude, такие цитаты обведены пунктиром.</li>
+      <li><b>Факт отдельно от трактовки.</b> В «Контексте» у каждого пункта метка: <span class="kind fact">Факт</span> — проверяемое (даты, люди, события), <span class="kind reading">Трактовка</span> — прочтение, с которым можно спорить.</li>
+      <li><b>Поправки к Феликсу.</b> Где автор ошибается в дате или факте, это сказано прямо. Его резкие суждения (о евреях, о масонах, о «тёмных силах») не замалчиваются: они отмечены как часть его взгляда.</li>
+      <li><b>Всё привязано к главам.</b> У каждой цитаты, даты, человека и статьи «Мира» есть номер главы. Поэтому сайт можно читать и вместе с книгой: в шапке есть выбор «я прочитал до главы», и всё дальнейшее скроется.</li>
+    </ol>
+  </section>
+
+  <section id="sections" class="doc-sec">
+    <h2>Разделы</h2>
+    <dl class="doc-defs">
+      <dt>Глава</dt><dd>Кратко о главе, люди, запись Ивана, исторический контекст, цитаты, «Мир вокруг главы» и даты. Нумерация I·1–27 и II·1–19, как в книге.</dd>
+      <dt>Бранчи</dt><dd>Весь дневник Ивана подряд, с постскриптумами и его списком литературы.</dd>
+      <dt>Цитаты</dt><dd>Все цитаты по темам: род, богатство, вера, Романовы, Распутин, революция, изгнание, юмор и другие.</dd>
+      <dt>Люди</dt><dd>104 человека: кто это, что о нём в каждой главе, цитаты.</dd>
+      <dt>Род</dt><dd>Родословная Юсуповых по схеме из книги, сама схема и восемь фотографий из издания.</dd>
+      <dt>Время</dt><dd>Две шкалы (история и семья Феликса), карта «кто в какой главе», полная хронология.</dd>
+      <dt>Мир</dt><dd>Места, люди эпохи, события, искусство и книги — с иллюстрациями.</dd>
+    </dl>
+  </section>
+
+  <section id="tech" class="doc-sec">
+    <h2>Как устроено</h2>
+    <ul class="doc-list">
+      <li>Статический сайт на GitHub Pages: <code>index.html</code>, <code>app.js</code>, <code>style.css</code> и один файл данных <code>data.json</code>. Без сборки и фреймворков.</li>
+      <li>Claude прочитал все 46 глав и дневник, для каждой главы собрал отдельный файл (контекст, цитаты, даты, мир, люди), потом скрипт склеил их в <code>data.json</code> и сверил цитаты с текстом.</li>
+      <li>Иллюстрации ищет и скачивает GitHub Actions (<code>tools/fetch_images.py</code>), в основном с Wikimedia Commons. Фотографии и схема рода — из самого издания.</li>
+      <li>Тема оформления (светлая, тёмная, сепия, ночная сепия) и выбранная глава хранятся только в вашем браузере.</li>
+    </ul>
+    <p class="muted">Частный читательский проект. Текст мемуаров цитируется фрагментами; фотографии из издания и из открытых источников использованы в некоммерческих целях.</p>
+  </section>
+</main>
+
+<footer class="foot doc-foot"><div class="wrap"><a href="./">← Вернуться к бранчам</a> · <a href="https://github.com/samvelkoch/yusupov">Код на GitHub</a></div></footer>
+<script src="theme.js?v=1"></script>
+</body>
+</html>

@@ -1,6 +1,6 @@
-try{ if(/[?&]reset/.test(location.search)) localStorage.removeItem("eoe-read"); }catch(e){}
+try{ if(/[?&]reset/.test(location.search)) localStorage.removeItem("yus-read"); }catch(e){}
 (function(){
-  var KEY='eoe-theme-mode';
+  var KEY='yus-theme-mode';
   var T={
     light:{name:'Светлая',hint:'белый фон',bg:'#f5f5f5',ink:'#1a1a1a'},
     sepia:{name:'Сепия',hint:'светлый кофе',bg:'#efe7dd',ink:'#3a2f28'},

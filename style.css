@@ -499,3 +499,32 @@ a.doc-card b{font:500 1rem var(--f-mono);overflow-wrap:anywhere}
 a.doc-card:hover,a.doc-card:focus-visible{border-color:var(--ink)}
 .doc code{font:400 .88em var(--f-mono);background:var(--lupine-soft);padding:1px 5px;border-radius:4px;overflow-wrap:anywhere}
 .doc-foot{border-top:1px solid var(--rule);padding-top:16px}
+
+/* === Бранч с князем: дополнения === */
+.ch-topics{font-size:.92rem;color:var(--muted);margin-top:6px;line-height:1.5}
+.front-links{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:10px}
+.cp-front{display:flex;flex-wrap:wrap;gap:8px;grid-column:1/-1;margin-top:8px}
+.brunch summary .jlead{margin:6px 0 0;color:var(--muted);font-size:.95rem;line-height:1.5}
+.brunch[open] summary .jlead{display:none}
+.brunch .jbody p{font-family:var(--f-display);font-size:1.06em;line-height:1.6}
+.brunch .jbody ul.jl{margin:0 0 12px;padding-left:1.2em}
+.brunch .jbody ul.jl li{margin:2px 0}
+.brunch .jread{font:400 .8rem/1.5 var(--f-mono);color:var(--muted);border-top:1px dashed var(--rule);padding-top:8px;margin-top:4px}
+.brunch .src-link{font-size:.85em;white-space:nowrap}
+.jgroup{font:600 .8rem var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:22px 0 8px}
+.pcard .pc-ch{display:block;margin-top:6px;font:400 .75rem var(--f-mono);color:var(--muted)}
+.fam-wide{grid-column:1/-1}
+.fam a.p{color:inherit;text-decoration:none}
+.fam a.p strong{text-decoration:underline;text-decoration-color:var(--rule);text-underline-offset:3px}
+.p.sp{border-style:dashed}
+.kid{flex:1 1 260px;min-width:0}
+.photos{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
+.photos .wimg>a{padding-top:160%}
+.photos figcaption{font-size:.82rem}
+.wimg.color img{filter:none!important}
+.wimg.color>a{padding-top:78%;background:#fff}
+.wimg.color img{object-fit:contain}
+.front-text p{font-family:var(--f-display);font-size:1.06em;line-height:1.65}
+#rod-tree .gen+.gen{padding-top:12px}
+#rod-tree .gen+.gen::before{height:12px}
+#rod-tree .p{padding:8px 12px}
