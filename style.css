@@ -597,5 +597,9 @@ a.doc-card:hover,a.doc-card:focus-visible{border-color:var(--ink)}
 :root[data-theme="dark"] .lmap.osm .leaflet-tile-pane,:root[data-theme="night"] .lmap.osm .leaflet-tile-pane{filter:grayscale(1) invert(1) brightness(.85)}
 /* отступы: шапка бранча, значок «Справка» в строке */
 .jtop{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
-.enc-n .kind{display:inline-block;padding:3px 6px;line-height:1.2;vertical-align:1px;margin-right:4px}
+p>.kind{display:inline-block;padding:3px 6px;line-height:1.2;vertical-align:1px;margin-right:4px}
 .enc-n{line-height:1.6}
+a.src-link{display:inline-block;font:500 .78rem var(--f-mono);color:var(--muted);text-decoration:none;border-bottom:1px dotted var(--rule);margin-top:4px}
+a.src-link:hover{color:var(--ink)}
+.jstory a:not(.chl):not(.src-link):not(.chip){color:inherit;text-decoration-color:var(--rule);text-underline-offset:3px}
+.echo-b{line-height:1.6}
