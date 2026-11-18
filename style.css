@@ -611,3 +611,4 @@ a.src-link:hover{color:var(--ink)}
 .book .wimg figcaption{display:none}
 .kr-ctl .chip{white-space:normal;text-align:left}
 .kr-ctl .chip{max-width:100%}
+#b-tabs{flex-wrap:wrap;overflow:visible}

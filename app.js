@@ -103,7 +103,7 @@ function start(D){
   var IV=D.ivan||{};
   function bLink(n){ var a=el('a','chl blink','бранч '+n); a.href='#b-'+n; return a; }
   (function(){ var tabs=document.getElementById('b-tabs'); if(!tabs) return;
-    var defs=[['diary','Дневник',JE.length],['mornings','Утро за утром',(IV.mornings||[]).length],['echo','Переклички',(IV.echo||[]).length],['enc','Энциклопедия',(IV.enc||[]).length],['shelf','Полка',(IV.shelf||[]).length],['notes','Что заметил Иван',(IV.notes||[]).length],['map','Карта',D.maps&&D.maps.ivan?D.maps.ivan.points.length:0],['krug','Круг дневника',D.krug?D.krug.ivan.nodes.length:0]];
+    var defs=[['diary','Дневник',JE.length],['krug','Круг дневника',D.krug?D.krug.ivan.nodes.length:0],['mornings','Утро за утром',(IV.mornings||[]).length],['echo','Переклички',(IV.echo||[]).length],['enc','Энциклопедия',(IV.enc||[]).length],['shelf','Полка',(IV.shelf||[]).length],['notes','Что заметил Иван',(IV.notes||[]).length],['map','Карта',D.maps&&D.maps.ivan?D.maps.ivan.points.length:0]];
     var built={};
     function bshow(id,save){ defs.forEach(function(d){ var on=d[0]===id; document.getElementById('bp-'+d[0]).hidden=!on; var b=document.getElementById('bt-'+d[0]); if(b) b.setAttribute('aria-pressed',on?'true':'false'); });
       if(!built[id]&&BUILD[id]){ built[id]=1; BUILD[id](document.getElementById('bp-'+id)); }
