@@ -28,7 +28,8 @@ def ch_paras():
             if p and not p.startswith('#'): yield n, p
 
 def sentence(p, m):
-    a = max(p.rfind('. ', 0, m.start()), p.rfind('! ', 0, m.start()), p.rfind('? ', 0, m.start())) + 2
+    a = max(p.rfind('. ', 0, m.start()), p.rfind('! ', 0, m.start()), p.rfind('? ', 0, m.start()))
+    a = 0 if a < 0 else a + 2
     b = min([x for x in (p.find('. ', m.end()), p.find('! ', m.end()), p.find('? ', m.end())) if x >= 0] or [len(p) - 1]) + 1
     s = p[max(a, 0):b].strip()
     return s if len(s) <= 260 else s[:257].rsplit(' ', 1)[0] + '…'
@@ -100,7 +101,11 @@ for e in dj:
     for s in e['segs']:
         chs = [int(x) for x in re.findall(r'\d+', s.get('ch') or '')]
         per = 0 if chs and chs[0] <= 27 else 1
-        iunits.append((per, e['n'], ' '.join(p for p in s['p'] if p.strip() != '**Читательский дневник**')))
+        # единица — абзац записи, как у Феликса: записи длинные, целиком они склеивают всех упомянутых в один круг
+        for txt in s['p']:
+            if txt.strip() == '**Читательский дневник**': continue
+            txt = re.sub(r'\(<[^>]*>\)|<https?://[^>]*>|\[([^\]]*)\]\([^)]*\)', lambda m: m.group(1) or '', txt).replace('**', '').replace('__', '')
+            iunits.append((per, e['n'], re.sub(r'\s+', ' ', txt).strip()))
 ivan = build(iunits, inames, top=60)
 for n in ivan['nodes']:
     n['pid'] = n['id'] if not n['id'].startswith('iv_') else None

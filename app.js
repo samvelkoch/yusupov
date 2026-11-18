@@ -103,7 +103,7 @@ function start(D){
   var IV=D.ivan||{};
   function bLink(n){ var a=el('a','chl blink','бранч '+n); a.href='#b-'+n; return a; }
   (function(){ var tabs=document.getElementById('b-tabs'); if(!tabs) return;
-    var defs=[['diary','Дневник',JE.length],['mornings','Утро за утром',(IV.mornings||[]).length],['echo','Переклички',(IV.echo||[]).length],['enc','Энциклопедия',(IV.enc||[]).length],['shelf','Полка',(IV.shelf||[]).length],['notes','Что заметил Иван',(IV.notes||[]).length],['map','Карта',D.maps&&D.maps.ivan?D.maps.ivan.points.length:0]];
+    var defs=[['diary','Дневник',JE.length],['mornings','Утро за утром',(IV.mornings||[]).length],['echo','Переклички',(IV.echo||[]).length],['enc','Энциклопедия',(IV.enc||[]).length],['shelf','Полка',(IV.shelf||[]).length],['notes','Что заметил Иван',(IV.notes||[]).length],['map','Карта',D.maps&&D.maps.ivan?D.maps.ivan.points.length:0],['krug','Круг дневника',D.krug?D.krug.ivan.nodes.length:0]];
     var built={};
     function bshow(id,save){ defs.forEach(function(d){ var on=d[0]===id; document.getElementById('bp-'+d[0]).hidden=!on; var b=document.getElementById('bt-'+d[0]); if(b) b.setAttribute('aria-pressed',on?'true':'false'); });
       if(!built[id]&&BUILD[id]){ built[id]=1; BUILD[id](document.getElementById('bp-'+id)); }
@@ -130,7 +130,9 @@ function start(D){
         var w=el('div','shelf'); (IV.shelf||[]).forEach(function(x){ var c=el('article','card book'); if(x.img&&x.img.src) c.appendChild(figure(x.img)); c.appendChild(el('b','bk-t',x.t)); c.appendChild(el('span','bk-a',x.a)); c.appendChild(el('p',null,x.why)); var m=el('div','mtop'); m.appendChild(bLink(x.b)); if(x.ch&&x.ch<=R) m.appendChild(chLink(x.ch)); c.appendChild(m); w.appendChild(c); }); p.appendChild(w); },
       notes:function(p){ p.appendChild(el('p','lead bp-lead','Сквозные темы, к которым Иван возвращается в разных бранчах.'));
         (IV.notes||[]).forEach(function(x){ var c=el('article','card note'); c.appendChild(el('h3',null,x.title)); c.appendChild(el('blockquote',null,'«'+x.ivan+'»')); var m=el('div','mtop'); x.b.forEach(function(n){ m.appendChild(bLink(n)); }); c.appendChild(m); p.appendChild(c); }); },
-      map:function(p){ p.appendChild(mapBlock('ivan',D.maps.ivan,function(pt){ return [bLink(pt.b)]; })); }
+      map:function(p){ p.appendChild(mapBlock('ivan',D.maps.ivan,function(pt){ return [bLink(pt.b)]; })); },
+      krug:function(p){ var h=el('div','block'), hd=el('header'); hd.appendChild(el('h2',null,'Круг дневника')); hd.appendChild(el('p','lead','Кто соседствует в записях Ивана: люди из мемуаров рядом с его собственным миром — соседями, пёселями, книгами и авторами. Лента — общий абзац записи. Это круг Ивана, не Феликса: у князя свой, во вкладке «Люди».')); h.appendChild(hd);
+        var box=el('div'); h.appendChild(box); p.appendChild(h); krugInit(box,D.krug.ivan,'ivan'); }
     };
     window.__bshow=bshow;
     var sv=null; try{ sv=localStorage.getItem('yus-btab'); }catch(e){} bshow(sv&&document.getElementById('bt-'+sv)?sv:'diary');
@@ -382,6 +384,15 @@ function start(D){
     var pr=document.getElementById('person'); if(pr) linkify(pr,curPerson); }
   var lt=null; new MutationObserver(function(){ if(lt) return; lt=setTimeout(function(){ lt=null; linkAll(); },30); }).observe(document.querySelector('main'),{childList:true,subtree:true}); linkAll();
 
+  // КРУГ: хордовая диаграмма (krug.js); Юсупов — абзацы мемуаров, Иван — записи дневника
+  function krugInit(box,K,who){ if(!window.Krug||!K) return;
+    var F=who==='felix', nodes=K.nodes.map(function(n){ var m=Object.assign({},n); if(m.pid&&!D.profiles.some(function(x){ return x.id===m.pid; })) delete m.pid; m.refs=n.refs.filter(function(r){ return !F||r<=R; }); m.ctx=n.ctx.filter(function(c){ return !F||c.r<=R; }); return m; });
+    window.Krug(box,{nodes:nodes,edges:K.edges,clusters:K.clusters},{title:F?'Круг Юсупова':'Круг дневника',per:['Книга I','Книга II'],
+      hint:F?'Имя открывает карточку: с кем этот человек чаще всего оказывается в одном абзаце, в каких главах и как о нём пишет Феликс.':'Имя открывает карточку: с кем оно соседствует у Ивана, в каких бранчах и его собственные слова.',
+      unitN:function(k){ return F?'глав':'бранчей'; }, unitP:function(k){ return 'абзацев'; },
+      refsTitle:F?'Главы':'Бранчи', ctxTitle:F?'Как пишет Феликс':'Как пишет Иван', person:F,
+      ref:function(r){ return F?chLink(r):bLink(r); }}); }
+  var krugF=false;
   // МАРШРУТЫ: #chapter, #ch-3, #brunch, #b-5, #quotes, #people, #p-id, #rod, #time, #world, #front-preface
   var tabs=['chapter','brunch','quotes','people','rod','time','world','person','front'];
   function show(tab,n){
@@ -391,6 +402,7 @@ function start(D){
     if(tab==='chapter') renderChapter(Math.min(Math.max(n||chState,1),MAXCH));
     if(tab==='person'){ curPerson=n; renderPerson(n); }
     if(tab==='front') renderFront(n);
+    if(tab==='people'&&!krugF){ krugF=true; krugInit(document.getElementById('krug-felix-box'),D.krug&&D.krug.felix,'felix'); }
   }
   function parse(){ var h=decodeURIComponent((location.hash||'').slice(1)), m;
     if((m=h.match(/^ch-(\d+)$/))) return ['chapter',+m[1]]; if((m=h.match(/^p-([a-z0-9_]+)$/))) return ['person',m[1]];

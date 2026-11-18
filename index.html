@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,500;0,700;1,500&family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="style.css?v=5">
+<link rel="stylesheet" href="style.css?v=6">
 </head>
 <body>
 <header class="top">
@@ -75,6 +75,7 @@
       <div class="bpanel" id="bp-shelf" hidden></div>
       <div class="bpanel" id="bp-notes" hidden></div>
       <div class="bpanel" id="bp-map" hidden></div>
+      <div class="bpanel" id="bp-krug" hidden></div>
     </div>
   </section>
 
@@ -92,6 +93,10 @@
   <!-- ЛЮДИ -->
   <section class="view" id="v-people" data-view="people" hidden>
     <div class="wrap">
+      <div class="block" id="krug-felix">
+        <header><h2>Круг Юсупова</h2><p class="lead">Кто с кем встречается на страницах мемуаров. Имена по кругу сгруппированы в кружки, которые сложились сами по тексту; лента — общие абзацы, чем шире, тем чаще вместе. Нажмите имя.</p></header>
+        <div id="krug-felix-box"></div>
+      </div>
       <div class="block">
         <header><h2>Люди мемуаров</h2><p class="lead">Справка о каждом: кто это на самом деле, что о нём в каждой главе, цитаты. Имя открывает страницу.</p></header>
         <div class="chips" id="cast-jump" role="group" aria-label="Группы"></div>
@@ -152,6 +157,7 @@
 <footer class="foot"><div class="wrap"><a href="https://t.me/nowineprose" target="_blank" rel="noopener">Канал Ивана @nowineprose</a> · <a href="method.html">Как это сделано</a> · <a href="#front-preface">Предисловие</a> · <a href="#front-readers">Моим читателям</a> · <a href="#front-conclusion">Заключение</a></div></footer>
 
 <script src="theme.js?v=1"></script>
-<script src="app.js?v=5" defer></script>
+<script src="krug.js?v=6" defer></script>
+<script src="app.js?v=6" defer></script>
 </body>
 </html>

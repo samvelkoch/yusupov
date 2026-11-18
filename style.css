@@ -576,7 +576,7 @@ a.doc-card:hover,a.doc-card:focus-visible{border-color:var(--ink)}
 .kr-grid{display:grid;grid-template-columns:1fr;gap:16px;align-items:start}
 @media (min-width:1000px){.kr-grid{grid-template-columns:minmax(0,3fr) minmax(0,2fr)}}
 .kr-svg{background:var(--surface);border:1px solid var(--rule);border-radius:14px;overflow:hidden}
-.kr-rib{fill:var(--ink);transition:opacity .15s}
+.kr-rib{fill:var(--ink);transition:opacity .15s;pointer-events:none}
 .kr-arc{fill:var(--ink);cursor:pointer;transition:opacity .15s}
 .kr-arc.sel{stroke:var(--ink);stroke-width:1.5}
 .kr-lbl{fill:var(--ink);font-family:var(--f-body);pointer-events:none;paint-order:stroke;stroke:var(--surface);stroke-width:3px}
@@ -603,3 +603,11 @@ a.src-link{display:inline-block;font:500 .78rem var(--f-mono);color:var(--muted)
 a.src-link:hover{color:var(--ink)}
 .jstory a:not(.chl):not(.src-link):not(.chip){color:inherit;text-decoration-color:var(--rule);text-underline-offset:3px}
 .echo-b{line-height:1.6}
+
+.kr-ctl .chips,.kr-card .chips{flex-wrap:wrap;overflow:visible}
+.kr-card .chip{white-space:normal;text-align:left}
+.book .wimg{float:right;width:92px;margin:0 0 8px 12px}
+.book .wimg>a{padding-top:125%}
+.book .wimg figcaption{display:none}
+.kr-ctl .chip{white-space:normal;text-align:left}
+.kr-ctl .chip{max-width:100%}
